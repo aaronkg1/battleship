@@ -1,0 +1,218 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.main-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.player-square,
+.computer-square {
+  min-height: 60px;
+  min-width: 60px;
+  max-width: 100px;
+  max-height: 100px;
+  border: solid black 1px;
+}
+
+.player-board,
+.computer-board {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: solid black 1px;
+  height: fit-content;
+  width: fit-content;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navy-ship-start {
+  background: url("./Assets/navy-ship.svg") 0 0;
+  background-repeat: no-repeat;
+}
+.navy-ship-end {
+  background: url("./Assets/navy-ship.svg") -60px 0;
+  background-repeat: no-repeat;
+}
+
+.attacker-start {
+  background: url("./Assets/attacker.svg") 0 0;
+  background-repeat: no-repeat;
+}
+.attacker-middle {
+  background: url("./Assets/attacker.svg") -60px 0;
+  background-repeat: no-repeat;
+}
+
+.attacker-end {
+  background: url("./Assets/attacker.svg") -120px 0;
+  background-repeat: no-repeat;
+}
+
+.submarine-start {
+  background: url("./Assets/submarine.svg") 0 0;
+  background-repeat: no-repeat;
+}
+.submarine-middle-start {
+  background: url("./Assets/submarine.svg") -60px 0;
+  background-repeat: no-repeat;
+}
+.submarine-middle-end {
+  background: url("./Assets/submarine.svg") -120px 0;
+  background-repeat: no-repeat;
+}
+.submarine-end {
+  background: url("./Assets/submarine.svg") -180px 0;
+  background-repeat: no-repeat;
+}
+
+.bombarder-start {
+  background: url("./Assets/bombarder.svg") 0 0;
+  background-repeat: no-repeat;
+}
+.bombarder-middle {
+  background: url("./Assets/bombarder.svg") -60px 0;
+  background-repeat: no-repeat;
+}
+
+.bombarder-end {
+  background: url("./Assets/bombarder.svg") -120px 0;
+  background-repeat: no-repeat;
+}
+
+.vertical {
+  transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+}

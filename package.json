@@ -1,0 +1,31 @@
+{
+  "name": "battleship-app",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aaronkg1/battleship.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aaronkg1/battleship/issues"
+  },
+  "homepage": "https://github.com/aaronkg1/battleship#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.11",
+    "css-loader": "^6.7.1",
+    "jest": "^27.5.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
