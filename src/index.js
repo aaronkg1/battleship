@@ -4,11 +4,14 @@ import ShipFactory from "./Ship";
 import Computer from "./Computer";
 import Gameboard from "./Gameboard";
 import Player from "./Player";
-import { addEventListenerToSquares, generateGrids } from "./DOM-interaction";
-
-let activeClass = "attacker";
-let currentShipLength = 3;
-let direction = "horizontal";
+import {
+  addEventListenerToSquares,
+  createPlayerFromInput,
+  generateComputerGrid,
+  generatePlayerGrid,
+} from "./DOM-interaction";
+import { gameSetup } from "./gameloop";
+createPlayerFromInput();
 
 // const gameLoop = async (player) => {
 //   const playerOne = player;
@@ -18,8 +21,3 @@ let direction = "horizontal";
 //   activeClass = "navy-ship";
 //   currentShipLength = 2;
 // };
-
-generateGrids();
-addEventListenerToSquares();
-
-export { activeClass, currentShipLength, direction };

@@ -1,7 +1,11 @@
 import { toLower } from "lodash";
-import { activeClass, currentShipLength, direction } from "./index";
+import { activeClass, currentShipLength, direction } from "./gameloop";
+import Player from "./Player";
+import { gameSetup } from "./gameloop";
 
-const generateGrids = () => {
+let currentCoordinates;
+
+const generatePlayerGrid = () => {
   const playerGrid = document.querySelector(".player-board");
   for (let i = 0; i < 7; i++) {
     const row = document.createElement("div");
@@ -14,7 +18,9 @@ const generateGrids = () => {
     }
     playerGrid.appendChild(row);
   }
+};
 
+const generateComputerGrid = () => {
   const computerGrid = document.querySelector(".computer-board");
   for (let i = 0; i < 7; i++) {
     const row = document.createElement("div");
@@ -30,16 +36,22 @@ const generateGrids = () => {
 };
 
 const addEventListenerToSquares = () => {
-  const playerSquares = document.querySelectorAll(".player-square");
-  playerSquares.forEach((square) => {
-    square.addEventListener("mouseover", addClassToElements);
-    square.addEventListener("mouseout", removeClassFromElements);
-    square.addEventListener("click", addClassToElements);
-    square.addEventListener("click", () => {
-      playerSquares.forEach((square) => {
-        square.removeEventListener("mouseover", addClassToElements);
-        square.removeEventListener("click", addClassToElements);
-        square.removeEventListener("mouseout", removeClassFromElements);
+  return new Promise(async (resolve, reject) => {
+    const playerSquares = document.querySelectorAll(".player-square");
+    playerSquares.forEach((square) => {
+      square.addEventListener("mouseover", addClassToElements);
+      square.addEventListener("mouseout", removeClassFromElements);
+      square.addEventListener("click", addClassToElements);
+      square.addEventListener("click", () => {
+        playerSquares.forEach((square) => {
+          square.removeEventListener("mouseover", addClassToElements);
+          square.removeEventListener("click", addClassToElements);
+          square.removeEventListener("mouseout", removeClassFromElements);
+        });
+      });
+      square.addEventListener("click", getCoordinatesToPlaceShip);
+      square.addEventListener("click", () => {
+        resolve(currentCoordinates);
       });
     });
   });
@@ -109,9 +121,39 @@ function getAdjacentSquares(e, squareList) {
   return squareArray;
 }
 
+const getCoordinatesToPlaceShip = (e) => {
+  const currentValue = e.target.value;
+  const playerSquares = document.getElementsByClassName("player-square");
+  const adjacentSquares = getAdjacentSquares(currentValue, playerSquares);
+  if (currentShipLength == 2) {
+    if (adjacentSquares.length >= 2) {
+      currentCoordinates = [adjacentSquares[0].value, adjacentSquares[1].value];
+    }
+  }
+  if (currentShipLength == 3) {
+    if (adjacentSquares.length >= 3) {
+      currentCoordinates = [
+        adjacentSquares[0].value,
+        adjacentSquares[1].value,
+        adjacentSquares[2].value,
+      ];
+    }
+  }
+  if (currentShipLength == 4) {
+    if (adjacentSquares.length >= 3) {
+      currentCoordinates = [
+        adjacentSquares[0].value,
+        adjacentSquares[1].value,
+        adjacentSquares[2].value,
+        adjacentSquares[3].value,
+      ];
+    }
+  }
+};
+
 const addClassToElements = (e) => {
   const currentValue = e.target.value;
-  const playerSquares = document.querySelectorAll(".player-square");
+  const playerSquares = document.getElementsByClassName("player-square");
   const adjacentSquares = getAdjacentSquares(currentValue, playerSquares);
 
   if (direction == "vertical") {
@@ -174,7 +216,25 @@ const removeClassFromElements = (e) => {
     }
   }
 };
-export { generateGrids, addEventListenerToSquares };
+
+const createPlayerFromInput = () => {
+  const newPlayer = document.querySelector(".new-player");
+  const playerNameInput = document.querySelector("#player-name");
+  const submitButton = document.querySelector("#submit");
+  const playerName = playerNameInput.value;
+  submitButton.addEventListener("click", () => {
+    gameSetup(Player(playerName));
+    newPlayer.classList.add("hidden");
+  });
+};
+
+export {
+  generatePlayerGrid,
+  generateComputerGrid,
+  createPlayerFromInput,
+  addEventListenerToSquares,
+  getCoordinatesToPlaceShip,
+};
 
 // function addClassToSquares(squares, className) {
 //   const squareOne = squares[0];

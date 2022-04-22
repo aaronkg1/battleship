@@ -216,3 +216,7 @@ table {
   -o-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
 }
+
+.hidden {
+  display: none;
+}

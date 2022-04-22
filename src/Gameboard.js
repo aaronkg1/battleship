@@ -14,7 +14,9 @@ const Gameboard = (name) => {
       board.push(column);
     }
   })();
-  const placeShip = (coordinates, ship) => {
+  const placeShip = async (coords, boat) => {
+    const coordinates = await coords;
+    const ship = await boat;
     if (coordinates.length === ship.length) {
       let positionEmpty = true;
       coordinates.forEach((coordinate) => {
