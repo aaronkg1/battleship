@@ -1,4 +1,6 @@
 import Player from "./Player";
+import { activeClass, currentShipLength, direction } from "./gameloop";
+import { addClassToComputerSquares } from "./DOM-interaction";
 
 const Computer = () => {
   const newComputer = Object.assign(Player("Computer"), {
@@ -10,6 +12,97 @@ const Computer = () => {
         return gameboard.receiveAttack([randomX, randomY]);
       } else if (board[randomX][randomY].hit === true) {
         makeRandomMove();
+      }
+    },
+    placeShipRandomly: (ship, gameboard) => {
+      const board = gameboard.board;
+      const coordinates = [];
+      let upOrDown = Math.floor(Math.random() * 2);
+      if (upOrDown === 0) {
+        direction = "horizontal";
+      } else direction = "vertical";
+
+      if (direction == "horizontal") {
+        if (ship.length == 2) {
+          const randomRow = Math.floor(Math.random() * 7);
+          const randomY = Math.floor(Math.random() * 6);
+          coordinates.push([randomRow, randomY], [randomRow, randomY + 1]);
+          if (gameboard.placeShip(coordinates, ship) != true) {
+            newComputer.placeShipRandomly(ship, gameboard);
+          } else {
+            addClassToComputerSquares(coordinates, ship.name);
+          }
+        }
+        if (ship.length == 3) {
+          const randomRow = Math.floor(Math.random() * 7);
+          const randomY = Math.floor(Math.random() * 5);
+          coordinates.push(
+            [randomRow, randomY],
+            [randomRow, randomY + 1],
+            [randomRow, randomY + 2]
+          );
+          if (gameboard.placeShip(coordinates, ship) != true) {
+            newComputer.placeShipRandomly(ship, gameboard);
+          } else {
+            addClassToComputerSquares(coordinates, ship.name);
+          }
+        }
+        if (ship.length == 4) {
+          const randomRow = Math.floor(Math.random() * 7);
+          const randomY = Math.floor(Math.random() * 4);
+          coordinates.push(
+            [randomRow, randomY],
+            [randomRow, randomY + 1],
+            [randomRow, randomY + 2],
+            [randomRow, randomY + 3]
+          );
+          if (gameboard.placeShip(coordinates, ship) != true) {
+            newComputer.placeShipRandomly(ship, gameboard);
+          } else {
+            addClassToComputerSquares(coordinates, ship.name);
+          }
+        }
+      }
+      if (direction == "vertical") {
+        if (ship.length == 2) {
+          const randomRow = Math.floor(Math.random() * 6);
+          const randomY = Math.floor(Math.random() * 7);
+          coordinates.push([randomRow, randomY], [randomRow + 1, randomY]);
+          if (gameboard.placeShip(coordinates, ship) != true) {
+            newComputer.placeShipRandomly(ship, gameboard);
+          } else {
+            addClassToComputerSquares(coordinates, ship.name);
+          }
+        }
+        if (ship.length == 3) {
+          const randomRow = Math.floor(Math.random() * 5);
+          const randomY = Math.floor(Math.random() * 7);
+          coordinates.push(
+            [randomRow, randomY],
+            [randomRow + 1, randomY],
+            [randomRow + 2, randomY]
+          );
+          if (gameboard.placeShip(coordinates, ship) != true) {
+            newComputer.placeShipRandomly(ship, gameboard);
+          } else {
+            addClassToComputerSquares(coordinates, ship.name);
+          }
+        }
+        if (ship.length == 4) {
+          const randomRow = Math.floor(Math.random() * 4);
+          const randomY = Math.floor(Math.random() * 7);
+          coordinates.push(
+            [randomRow, randomY],
+            [randomRow + 1, randomY],
+            [randomRow + 2, randomY],
+            [randomRow + 3, randomY]
+          );
+          if (gameboard.placeShip(coordinates, ship) != true) {
+            newComputer.placeShipRandomly(ship, gameboard);
+          } else {
+            addClassToComputerSquares(coordinates, ship.name);
+          }
+        }
       }
     },
     makeMove: (gameboard) => {

@@ -14,34 +14,35 @@ const Gameboard = (name) => {
       board.push(column);
     }
   })();
-  const placeShip = async (coords, boat) => {
-    const coordinates = await coords;
-    const ship = await boat;
-    if (coordinates.length === ship.length) {
-      let positionEmpty = true;
-      coordinates.forEach((coordinate) => {
-        const xCoord = coordinate[0];
-        const yCoord = coordinate[1];
+  const placeShip = (coords, boat) => {
+    const coordinates = coords;
+    const ship = boat;
+    let positionEmpty = true;
+    if (coordinates.length !== ship.length) {
+      return false;
+    }
+    coordinates.forEach((coordinate) => {
+      const xCoord = coordinate[0];
+      const yCoord = coordinate[1];
+      const position = board[xCoord][yCoord];
+
+      if (position.empty == false) {
+        positionEmpty = false;
+        return positionEmpty;
+      }
+    });
+    if (positionEmpty == true) {
+      for (let i = 0; i < coordinates.length; i++) {
+        const xCoord = coordinates[i][0];
+        const yCoord = coordinates[i][1];
         const position = board[xCoord][yCoord];
-        if (position.empty === false) {
-          // prevents ship being added to occupied position
-          positionEmpty = false;
-        }
-      });
-      if (positionEmpty === false) {
-        return "Position occupied";
-      } else
-        for (let i = 0; i < coordinates.length; i++) {
-          const xCoord = coordinates[i][0];
-          const yCoord = coordinates[i][1];
-          const position = board[xCoord][yCoord];
-          position.empty = false;
-          position.ship = ship;
-          position.shipSegment = ship.segments[i].segment;
-          ships.push(ship);
-        }
-      return "Ship placed";
-    } else return "Coordinates must match ship length";
+        position.empty = false;
+        position.ship = ship;
+        position.shipSegment = ship.segments[i].segment;
+      }
+      ships.push(ship);
+      return true;
+    }
   };
   const receiveAttack = (coordinates) => {
     const position = board[coordinates[0]][coordinates[1]];
