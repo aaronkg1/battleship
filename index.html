@@ -12,12 +12,17 @@
       <div class="player-board"></div>
       <div class="new-player">
         <label for="player-name">Enter player name: </label>
-        <input type="text" id="player-name" />
+        <input type="text" class="player-name" />
         <button id="submit">Let's go!</button>
       </div>
       <div class="computer-board"></div>
     </div>
-
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h1 class="player-wins"></h1>
+        <button id="play-again">Play Again!</button>
+      </div>
+    </div>
     <script src="bundle.js"></script>
   </body>
 </html>
