@@ -11,4 +11,5 @@ import {
   generatePlayerGrid,
 } from "./DOM-interaction";
 import { gameSetup } from "./gameloop";
+
 createPlayerFromInput();

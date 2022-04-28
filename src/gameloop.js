@@ -7,6 +7,7 @@ import {
   currentCoordinates,
   displayComputerHits,
   displaySunkShips,
+  displayWinner,
   generateComputerGrid,
   generatePlayerGrid,
   getCoordinatesToPlaceShip,
@@ -22,8 +23,7 @@ let activeClass = "attacker";
 let currentShipLength = 3;
 let direction = "horizontal";
 
-const gameSetup = async (player) => {
-  const playerOne = player;
+const gameSetup = async (playerOne) => {
   playerOne.gameboard = Gameboard(playerOne.name);
 
   generatePlayerGrid();
@@ -54,7 +54,6 @@ const gameSetup = async (player) => {
     ShipFactory(currentShipLength, activeClass)
   );
   removeEventListeners();
-  console.log(playerOne.gameboard);
   const computer = Computer();
   computer.gameboard = Gameboard(computer.name);
   generateComputerGrid();
@@ -100,6 +99,11 @@ const gameLoop = async (player, computer) => {
     displayComputerHits(player.gameboard);
 
     continue;
+  }
+  if (player.gameboard.allShipsSunk() == true) {
+    displayWinner(computer);
+  } else if (computer.gameboard.allShipsSunk() == true) {
+    displayWinner(player);
   }
 };
 

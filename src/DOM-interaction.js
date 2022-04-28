@@ -1,4 +1,4 @@
-import { remove, toLower } from "lodash";
+import { remove, toLower, capitalize } from "lodash";
 import { activeClass, currentShipLength, direction } from "./gameloop";
 import Player from "./Player";
 import { gameSetup } from "./gameloop";
@@ -411,12 +411,13 @@ const removeClassFromElements = (e) => {
 
 const createPlayerFromInput = () => {
   const newPlayer = document.querySelector(".new-player");
-  const playerNameInput = document.querySelector("#player-name");
   const submitButton = document.querySelector("#submit");
-  const playerName = playerNameInput.value;
   submitButton.addEventListener("click", () => {
-    gameSetup(Player(playerName));
+    const playerName = document.querySelector(".player-name").value;
     newPlayer.classList.add("hide");
+    const player = Player(`${playerName}`);
+    player.name = playerName;
+    gameSetup(player);
   });
 };
 
@@ -436,6 +437,18 @@ const displayComputerHits = (gameboard) => {
         }
       }
     }
+  });
+};
+
+const displayWinner = (winner) => {
+  const winnerDisplay = document.querySelector(".player-wins");
+  const playAgain = document.querySelector("#play-again");
+  const winnerName = _.capitalize(winner.name);
+  winnerDisplay.textContent = winnerName + " wins!";
+  const modal = document.getElementById("modal");
+  modal.style.display = "block";
+  playAgain.addEventListener("click", function playAgain() {
+    location.reload();
   });
 };
 
@@ -520,6 +533,7 @@ export {
   attackComputerSquare,
   displaySunkShips,
   displayComputerHits,
+  displayWinner,
 };
 
 // function addClassToSquares(squares, className) {
