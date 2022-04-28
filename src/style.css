@@ -163,8 +163,13 @@ table {
   background: url("./Assets/navy-ship.svg") 0 0;
   background-repeat: no-repeat;
 }
-.navy-ship-end {
+.navy-ship-middle {
   background: url("./Assets/navy-ship.svg") -60px 0;
+  background-repeat: no-repeat;
+}
+
+.navy-ship-end {
+  background: url("./Assets/navy-ship.svg") -120px 0;
   background-repeat: no-repeat;
 }
 

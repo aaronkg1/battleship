@@ -126,7 +126,6 @@ const Computer = () => {
           }
         }
       }
-      console.log(hits);
       if (hits.length > 0) {
         unSunkCoordX = hits[0].coordinates[0];
         unSunkCoordY = hits[0].coordinates[1];

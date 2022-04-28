@@ -19,14 +19,20 @@ import Gameboard from "./Gameboard";
 import Player from "./Player";
 import ShipFactory from "./Ship";
 import { repeat, waitTilTrue } from "./utils";
-let activeClass = "attacker";
-let currentShipLength = 3;
+let activeClass = "submarine";
+let currentShipLength = 4;
 let direction = "horizontal";
 
 const gameSetup = async (playerOne) => {
   playerOne.gameboard = Gameboard(playerOne.name);
-
   generatePlayerGrid();
+  await waitForClick();
+  playerOne.gameboard.placeShip(
+    currentCoordinates,
+    ShipFactory(currentShipLength, activeClass)
+  );
+  activeClass = "attacker";
+  currentShipLength = 3;
   await waitForClick();
   playerOne.gameboard.placeShip(
     currentCoordinates,
@@ -39,21 +45,14 @@ const gameSetup = async (playerOne) => {
     currentCoordinates,
     ShipFactory(currentShipLength, activeClass)
   );
-  activeClass = "submarine";
-  currentShipLength = 4;
-  await waitForClick();
-  playerOne.gameboard.placeShip(
-    currentCoordinates,
-    ShipFactory(currentShipLength, activeClass)
-  );
-  activeClass = "navy-ship";
-  currentShipLength = 2;
-  await waitForClick();
-  playerOne.gameboard.placeShip(
-    currentCoordinates,
-    ShipFactory(currentShipLength, activeClass)
-  );
   removeEventListeners();
+  activeClass = "navy-ship";
+  currentShipLength = 3;
+  await waitForClick();
+  playerOne.gameboard.placeShip(
+    currentCoordinates,
+    ShipFactory(currentShipLength, activeClass)
+  );
   const computer = Computer();
   computer.gameboard = Gameboard(computer.name);
   generateComputerGrid();
@@ -78,7 +77,7 @@ const gameSetup = async (playerOne) => {
     computer.gameboard
   );
   activeClass = "navy-ship";
-  currentShipLength = 2;
+  currentShipLength = 3;
 
   computer.placeShipRandomly(
     ShipFactory(currentShipLength, activeClass),

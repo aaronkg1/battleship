@@ -28,6 +28,7 @@ const generateComputerGrid = () => {
     for (let j = 0; j < 7; j++) {
       const square = document.createElement("div");
       square.classList.add("computer-square");
+      square.classList.add("hidden");
       square.value = [i, j];
       row.appendChild(square);
     }
@@ -35,16 +36,34 @@ const generateComputerGrid = () => {
   }
 };
 
+const removeEventListeners = () => {
+  const allPlayerSquares = document.querySelectorAll(".player-square");
+  const squareValues = [];
+  allPlayerSquares.forEach((square) => {
+    squareValues.push(square.value);
+  });
+
+  for (let i = 0; i < allPlayerSquares.length; i++) {
+    const newElement = allPlayerSquares[i].cloneNode(true);
+    allPlayerSquares[i].replaceWith(newElement);
+    newElement.value = squareValues[i];
+  }
+};
+
 const waitForClick = async () => {
+  removeEventListeners();
   const promiseArray = [];
   const allPlayerSquares = document.querySelectorAll(".player-square");
   const playerSquares = [...allPlayerSquares].filter(
     (square) =>
-      square.className == "player-square" && !getImpossibleSquares(square)
+      square.className == "player-square" &&
+      !getImpossibleSquares(square) &&
+      areNextSquaresEmpty(square)
   );
   const occupiedSquares = [...allPlayerSquares].filter(
     (square) => square.className != "player-square"
   );
+
   playerSquares.forEach((square) => {
     const click = new Promise((resolve, reject) => {
       occupiedSquares.forEach((square) => {
@@ -52,12 +71,7 @@ const waitForClick = async () => {
         square.removeEventListener("click", addClassToElements);
         square.removeEventListener("mouseout", removeClassFromElements);
         square.removeEventListener("click", getCoordinatesToPlaceShip);
-        square.addEventListener("click", function repeat() {
-          square.removeEventListener("click", repeat);
-          resolve(addEventListenerToSquares());
-        });
       });
-
       square.addEventListener("mouseover", addClassToElements);
       square.addEventListener("mouseout", removeClassFromElements);
       square.addEventListener("click", addClassToElements);
@@ -84,16 +98,6 @@ const waitForClick = async () => {
     promiseArray.push(click);
   });
   await Promise.race(promiseArray);
-};
-
-const removeEventListeners = () => {
-  const playerSquares = document.querySelectorAll(".player-square");
-  playerSquares.forEach((square) => {
-    square.removeEventListener("mouseover", addClassToElements);
-    square.removeEventListener("click", addClassToElements);
-    square.removeEventListener("mouseout", removeClassFromElements);
-    square.removeEventListener("click", getCoordinatesToPlaceShip);
-  });
 };
 
 const getImpossibleSquares = (square) => {
@@ -126,6 +130,66 @@ const getImpossibleSquares = (square) => {
     }
     if (currentShipLength == 4) {
       if (square.value[0] > 3) {
+        return true;
+      } else return false;
+    }
+  }
+};
+
+const areNextSquaresEmpty = (square) => {
+  const playerSquares = document.querySelectorAll(".player-square");
+  const squareValue = square.value;
+
+  if (direction == "horizontal") {
+    if (currentShipLength == 2) {
+      const nextSquare = [...playerSquares].filter(
+        (square) =>
+          square.value[0] == squareValue[0] &&
+          square.value[1] == squareValue[1] + 1
+      );
+      if (nextSquare[0].className == "player-square") {
+        return true;
+      } else return false;
+    }
+    if (currentShipLength == 3) {
+      const nextSquare = [...playerSquares].filter(
+        (square) =>
+          square.value[0] == squareValue[0] &&
+          square.value[1] == squareValue[1] + 1
+      );
+      const lastSquare = [...playerSquares].filter(
+        (square) =>
+          square.value[0] == squareValue[0] &&
+          square.value[1] == squareValue[1] + 2
+      );
+      if (
+        nextSquare[0].className == "player-square" &&
+        lastSquare[0].className == "player-square"
+      ) {
+        return true;
+      } else return false;
+    }
+    if (currentShipLength == 4) {
+      const nextSquare = [...playerSquares].filter(
+        (square) =>
+          square.value[0] == squareValue[0] &&
+          square.value[1] == squareValue[1] + 1
+      );
+      const middleSquare = [...playerSquares].filter(
+        (square) =>
+          square.value[0] == squareValue[0] &&
+          square.value[1] == squareValue[1] + 2
+      );
+      const lastSquare = [...playerSquares].filter(
+        (square) =>
+          square.value[0] == squareValue[0] &&
+          square.value[1] == squareValue[1] + 3
+      );
+      if (
+        nextSquare[0].className == "player-square" &&
+        middleSquare[0].className == "player-square" &&
+        lastSquare[0].className == "player-square"
+      ) {
         return true;
       } else return false;
     }
@@ -283,7 +347,6 @@ const addClassToComputerSquares = (coordinates, shipName) => {
 
   if (coordinates.length == 2) {
     computerSquares.forEach((square) => {
-      square.classList.add("hidden");
       if (
         square.value[0] == coordinates[0][0] &&
         square.value[1] == coordinates[0][1]
@@ -535,21 +598,3 @@ export {
   displayComputerHits,
   displayWinner,
 };
-
-// function addClassToSquares(squares, className) {
-//   const squareOne = squares[0];
-//   const squareTwo = squares[1];
-//   const squareThree = squares[2];
-//   squareOne.classList.add(`${className}-start`);
-//   squareTwo.classList.add(`${className}-middle`);
-//   squareThree.classList.add(`${className}-end`);
-// }
-
-// function removeClassFromSquares(squares, className) {
-//   const squareOne = squares[0];
-//   const squareTwo = squares[1];
-//   const squareThree = squares[2];
-//   squareOne.classList.remove(`${className}-start`);
-//   squareTwo.classList.remove(`${className}-middle`);
-//   squareThree.classList.remove(`${className}-end`);
-// }
