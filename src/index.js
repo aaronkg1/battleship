@@ -12,12 +12,3 @@ import {
 } from "./DOM-interaction";
 import { gameSetup } from "./gameloop";
 createPlayerFromInput();
-
-// const gameLoop = async (player) => {
-//   const playerOne = player;
-//   playerOne.gameboard = Gameboard(playerOne.name);
-//   const playerTwo = Player("Computer");
-//   playerTwo.gameboard = Gameboard(playerTwo.name);
-//   activeClass = "navy-ship";
-//   currentShipLength = 2;
-// };

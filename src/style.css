@@ -137,6 +137,10 @@ table {
   border: solid black 1px;
 }
 
+.computer-square {
+  cursor: pointer;
+}
+
 .player-board,
 .computer-board {
   margin-top: 50px;
@@ -218,5 +222,16 @@ table {
 }
 
 .hidden {
+  background-image: none;
+}
+.hide {
   display: none;
+}
+.hit {
+  background-color: rgba(255, 0, 0, 0.213);
+  cursor: no-drop;
+}
+
+.success {
+  background-color: rgba(0, 128, 0, 0.213);
 }

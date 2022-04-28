@@ -11,7 +11,7 @@ const Computer = () => {
       if (board[randomX][randomY].hit === false) {
         return gameboard.receiveAttack([randomX, randomY]);
       } else if (board[randomX][randomY].hit === true) {
-        makeRandomMove();
+        newComputer.makeRandomMove(gameboard);
       }
     },
     placeShipRandomly: (ship, gameboard) => {
@@ -29,6 +29,7 @@ const Computer = () => {
           coordinates.push([randomRow, randomY], [randomRow, randomY + 1]);
           if (gameboard.placeShip(coordinates, ship) != true) {
             newComputer.placeShipRandomly(ship, gameboard);
+            return;
           } else {
             addClassToComputerSquares(coordinates, ship.name);
           }
@@ -43,6 +44,7 @@ const Computer = () => {
           );
           if (gameboard.placeShip(coordinates, ship) != true) {
             newComputer.placeShipRandomly(ship, gameboard);
+            return;
           } else {
             addClassToComputerSquares(coordinates, ship.name);
           }
@@ -58,6 +60,7 @@ const Computer = () => {
           );
           if (gameboard.placeShip(coordinates, ship) != true) {
             newComputer.placeShipRandomly(ship, gameboard);
+            return;
           } else {
             addClassToComputerSquares(coordinates, ship.name);
           }
@@ -70,6 +73,7 @@ const Computer = () => {
           coordinates.push([randomRow, randomY], [randomRow + 1, randomY]);
           if (gameboard.placeShip(coordinates, ship) != true) {
             newComputer.placeShipRandomly(ship, gameboard);
+            return;
           } else {
             addClassToComputerSquares(coordinates, ship.name);
           }
@@ -84,6 +88,7 @@ const Computer = () => {
           );
           if (gameboard.placeShip(coordinates, ship) != true) {
             newComputer.placeShipRandomly(ship, gameboard);
+            return;
           } else {
             addClassToComputerSquares(coordinates, ship.name);
           }
@@ -99,6 +104,7 @@ const Computer = () => {
           );
           if (gameboard.placeShip(coordinates, ship) != true) {
             newComputer.placeShipRandomly(ship, gameboard);
+            return;
           } else {
             addClassToComputerSquares(coordinates, ship.name);
           }
@@ -112,13 +118,15 @@ const Computer = () => {
       let unSunkCoordY;
       for (let i = 0; i < board.length; i++) {
         for (let j = 0; j < board.length; j++) {
-          if (board[i][j].hit === true && board[i][j].empty === false) {
+          if (!!board[i][j].hit && !board[i][j].empty) {
             if (board[i][j].ship.isSunk() === false) {
               hits.push(board[i][j]);
+            } else {
             }
           }
         }
       }
+      console.log(hits);
       if (hits.length > 0) {
         unSunkCoordX = hits[0].coordinates[0];
         unSunkCoordY = hits[0].coordinates[1];
@@ -194,6 +202,8 @@ const Computer = () => {
             board[secondXCoord + 3][secondYCoord].hit === false
           ) {
             return gameboard.receiveAttack([secondXCoord + 3, secondYCoord]);
+          } else {
+            newComputer.makeRandomMove(gameboard);
           }
         } else if (direction === "horizontal") {
           // try and hit the surrounding horizontal 3 on either side
@@ -227,6 +237,8 @@ const Computer = () => {
             board[secondXCoord][secondYCoord - 3].hit === false
           ) {
             return gameboard.receiveAttack([secondXCoord, secondYCoord - 3]);
+          } else {
+            newComputer.makeRandomMove(gameboard);
           }
         } else if (!direction) {
           newComputer.makeRandomMove(gameboard);

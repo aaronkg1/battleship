@@ -4,4 +4,10 @@ function repeat(func) {
   return promise;
 }
 
-export { repeat };
+function waitTilTrue(func) {
+  var promise = Promise.resolve();
+  while (func != true) promise = promise.then(func);
+  return promise;
+}
+
+export { repeat, waitTilTrue };

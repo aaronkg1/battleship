@@ -1,5 +1,6 @@
 const Gameboard = (name) => {
   const ships = [];
+  const sunkShips = [];
   const board = [];
   const boardInit = (() => {
     for (let x = 0; x < 7; x++) {
@@ -26,12 +27,12 @@ const Gameboard = (name) => {
       const yCoord = coordinate[1];
       const position = board[xCoord][yCoord];
 
-      if (position.empty == false) {
+      if (!position.empty) {
         positionEmpty = false;
         return positionEmpty;
       }
     });
-    if (positionEmpty == true) {
+    if (!!positionEmpty) {
       for (let i = 0; i < coordinates.length; i++) {
         const xCoord = coordinates[i][0];
         const yCoord = coordinates[i][1];
@@ -46,33 +47,39 @@ const Gameboard = (name) => {
   };
   const receiveAttack = (coordinates) => {
     const position = board[coordinates[0]][coordinates[1]];
-    if (position.empty === false) {
+    if (!position.empty) {
       const shipAttacked = position.ship;
       const shipName = shipAttacked.name;
       const shipSegment = position.shipSegment;
       const attackedSegment = shipAttacked.segments[shipSegment];
-      if (attackedSegment.hit === false) {
+      position.hit = true;
+      if (!attackedSegment.hit) {
         position.hit = true;
         shipAttacked.hit(shipSegment);
         if (shipAttacked.isSunk() === true) {
+          sunkShips.push(position.ship);
           return `${shipName} sunk`;
-        } else return `${shipName} hit`;
-      } else return `${shipName} already hit in segment`;
+        } else return `Ship hit`;
+      }
     } else if (position.hit === true) {
       return "Position already attacked";
     } else position.hit = true;
     return "Shot missed";
   };
   const allShipsSunk = () => {
-    let shipsSunk = true;
-    ships.forEach((ship) => {
-      if (ship.isSunk() === false) {
-        shipsSunk = false;
-      }
-    });
-    return shipsSunk;
+    if (sunkShips.length == ships.length) {
+      return true;
+    } else return false;
   };
-  return { board, placeShip, name, ships, receiveAttack, allShipsSunk };
+  return {
+    board,
+    placeShip,
+    name,
+    ships,
+    sunkShips,
+    receiveAttack,
+    allShipsSunk,
+  };
 };
 
 export default Gameboard;
