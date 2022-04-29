@@ -7,7 +7,9 @@ import {
   displayWinner,
   generateComputerGrid,
   generatePlayerGrid,
+  hideRotateBtn,
   removeEventListeners,
+  revealComputerBoard,
   waitForClick,
 } from "./DOM-interaction";
 
@@ -49,6 +51,7 @@ const gameSetup = async (playerOne) => {
     currentCoordinates,
     ShipFactory(currentShipLength, activeClass)
   );
+  hideRotateBtn();
   const computer = Computer();
   computer.gameboard = Gameboard(computer.name);
   generateComputerGrid();
@@ -78,11 +81,11 @@ const gameSetup = async (playerOne) => {
     ShipFactory(currentShipLength, activeClass),
     computer.gameboard
   );
+  revealComputerBoard();
   gameLoop(playerOne, computer);
 };
 
 const gameLoop = async (player, computer) => {
-  console.log(player.gameboard);
   while (
     player.gameboard.allShipsSunk() == false &&
     computer.gameboard.allShipsSunk() == false
@@ -95,10 +98,10 @@ const gameLoop = async (player, computer) => {
 
     continue;
   }
-  if (player.gameboard.allShipsSunk() == true) {
-    displayWinner(computer);
-  } else if (computer.gameboard.allShipsSunk() == true) {
+  if (computer.gameboard.allShipsSunk() == true) {
     displayWinner(player);
+  } else if (player.gameboard.allShipsSunk() == true) {
+    displayWinner(computer);
   }
 };
 

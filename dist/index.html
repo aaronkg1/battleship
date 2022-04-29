@@ -13,24 +13,30 @@
   </head>
   <body>
     <div class="main-container">
-      <div class="player-board"></div>
-      <span class="material-symbols-outlined rotate-btn">
-        pivot_table_chart
-      </span>
-      <div class="computer-board"></div>
+      <h1 class="main-title">Battleships</h1>
+      <div class="boards">
+        <div class="player-container">
+          <div class="player-board"></div>
+          <span class="material-symbols-outlined rotate-btn">
+            pivot_table_chart
+          </span>
+        </div>
+
+        <div class="computer-board hide"></div>
+      </div>
     </div>
 
     <div class="new-player">
       <div class="modal-content">
         <label for="player-name">Enter player name: </label>
-        <input type="text" class="player-name" />
-        <button id="submit">Let's go!</button>
+        <input type="text" class="player-name" id="player-name" />
+        <button id="submit">Play</button>
       </div>
     </div>
     <div id="modal" class="modal">
       <div class="modal-content">
         <h1 class="player-wins"></h1>
-        <button id="play-again">Play Again!</button>
+        <button id="play-again">Play Again?</button>
       </div>
     </div>
     <script src="bundle.js"></script>

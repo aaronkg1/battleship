@@ -502,12 +502,23 @@ const removeClassFromElements = (e) => {
 const createPlayerFromInput = () => {
   const newPlayer = document.querySelector(".new-player");
   const submitButton = document.querySelector("#submit");
+  const playerInput = document.querySelector("#player-name");
+  playerInput.focus();
   submitButton.addEventListener("click", () => {
-    const playerName = document.querySelector(".player-name").value;
+    const playerName = playerInput.value;
     newPlayer.classList.add("hide");
     const player = Player(`${playerName}`);
     player.name = playerName;
     gameSetup(player);
+  });
+  playerInput.addEventListener("keydown", (e) => {
+    if (e.key == "Enter") {
+      const playerName = playerInput.value;
+      newPlayer.classList.add("hide");
+      const player = Player(`${playerName}`);
+      player.name = playerName;
+      gameSetup(player);
+    }
   });
 };
 
@@ -610,6 +621,16 @@ const displaySunkShips = (sunkShips) => {
   });
 };
 
+const hideRotateBtn = () => {
+  const rotateButton = document.querySelector(".rotate-btn");
+  rotateButton.classList.add("hide");
+};
+
+const revealComputerBoard = () => {
+  const computerBoard = document.querySelector(".computer-board");
+  computerBoard.classList.remove("hide");
+};
+
 export {
   generatePlayerGrid,
   generateComputerGrid,
@@ -624,4 +645,6 @@ export {
   displaySunkShips,
   displayComputerHits,
   displayWinner,
+  hideRotateBtn,
+  revealComputerBoard,
 };
