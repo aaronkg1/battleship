@@ -1,16 +1,12 @@
 import Computer from "./Computer";
 import {
-  addEventListenerToSquares,
   attackComputerSquare,
-  attackMe,
-  attackSquares,
   currentCoordinates,
   displayComputerHits,
   displaySunkShips,
   displayWinner,
   generateComputerGrid,
   generatePlayerGrid,
-  getCoordinatesToPlaceShip,
   removeEventListeners,
   waitForClick,
 } from "./DOM-interaction";
@@ -21,7 +17,7 @@ import ShipFactory from "./Ship";
 import { repeat, waitTilTrue } from "./utils";
 let activeClass = "submarine";
 let currentShipLength = 4;
-let direction = "horizontal";
+let direction = "vertical";
 
 const gameSetup = async (playerOne) => {
   playerOne.gameboard = Gameboard(playerOne.name);
@@ -71,7 +67,6 @@ const gameSetup = async (playerOne) => {
   );
   activeClass = "submarine";
   currentShipLength = 4;
-
   computer.placeShipRandomly(
     ShipFactory(currentShipLength, activeClass),
     computer.gameboard
@@ -87,6 +82,7 @@ const gameSetup = async (playerOne) => {
 };
 
 const gameLoop = async (player, computer) => {
+  console.log(player.gameboard);
   while (
     player.gameboard.allShipsSunk() == false &&
     computer.gameboard.allShipsSunk() == false

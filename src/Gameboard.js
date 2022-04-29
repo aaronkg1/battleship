@@ -58,13 +58,13 @@ const Gameboard = (name) => {
         shipAttacked.hit(shipSegment);
         if (shipAttacked.isSunk() === true) {
           sunkShips.push(position.ship);
-          return `${shipName} sunk`;
-        } else return `Ship hit`;
+          return;
+        } else return; // ship hit;
       }
     } else if (position.hit === true) {
-      return "Position already attacked";
+      return; // position already hit
     } else position.hit = true;
-    return "Shot missed";
+    return;
   };
   const allShipsSunk = () => {
     if (sunkShips.length == ships.length) {

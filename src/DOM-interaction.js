@@ -53,6 +53,7 @@ const removeEventListeners = () => {
 const waitForClick = async () => {
   removeEventListeners();
   const promiseArray = [];
+
   const allPlayerSquares = document.querySelectorAll(".player-square");
   const playerSquares = [...allPlayerSquares].filter(
     (square) =>
@@ -97,7 +98,24 @@ const waitForClick = async () => {
     });
     promiseArray.push(click);
   });
-  await Promise.race(promiseArray);
+
+  const rotateButton = document.querySelector(".rotate-btn");
+  const rotateClick = new Promise((resolve) => {
+    rotateButton.addEventListener("click", changeDirection);
+    rotateButton.addEventListener("click", function eventHandler() {
+      rotateButton.removeEventListener("click", eventHandler);
+      rotateButton.removeEventListener("click", changeDirection);
+      resolve("rotate");
+    });
+  });
+  promiseArray.push(rotateClick);
+  return Promise.race(promiseArray).then((value) => {
+    return new Promise((resolve) => {
+      if (value == "rotate") {
+        resolve(waitForClick());
+      } else resolve();
+    });
+  });
 };
 
 const getImpossibleSquares = (square) => {
@@ -117,7 +135,8 @@ const getImpossibleSquares = (square) => {
         return true;
       } else return false;
     }
-  } else if (direction == "vertical") {
+  }
+  if (direction == "vertical") {
     if (currentShipLength == 2) {
       if (square.value[0] > 5) {
         return true;
@@ -136,63 +155,81 @@ const getImpossibleSquares = (square) => {
   }
 };
 
+const changeDirection = () => {
+  if (direction == "horizontal") {
+    direction = "vertical";
+  } else if (direction == "vertical") {
+    direction = "horizontal";
+  }
+  return;
+};
+
 const areNextSquaresEmpty = (square) => {
   const playerSquares = document.querySelectorAll(".player-square");
   const squareValue = square.value;
+  let x;
+  let y;
 
   if (direction == "horizontal") {
-    if (currentShipLength == 2) {
-      const nextSquare = [...playerSquares].filter(
-        (square) =>
-          square.value[0] == squareValue[0] &&
-          square.value[1] == squareValue[1] + 1
-      );
-      if (nextSquare[0].className == "player-square") {
-        return true;
-      } else return false;
-    }
-    if (currentShipLength == 3) {
-      const nextSquare = [...playerSquares].filter(
-        (square) =>
-          square.value[0] == squareValue[0] &&
-          square.value[1] == squareValue[1] + 1
-      );
-      const lastSquare = [...playerSquares].filter(
-        (square) =>
-          square.value[0] == squareValue[0] &&
-          square.value[1] == squareValue[1] + 2
-      );
-      if (
-        nextSquare[0].className == "player-square" &&
-        lastSquare[0].className == "player-square"
-      ) {
-        return true;
-      } else return false;
-    }
-    if (currentShipLength == 4) {
-      const nextSquare = [...playerSquares].filter(
-        (square) =>
-          square.value[0] == squareValue[0] &&
-          square.value[1] == squareValue[1] + 1
-      );
-      const middleSquare = [...playerSquares].filter(
-        (square) =>
-          square.value[0] == squareValue[0] &&
-          square.value[1] == squareValue[1] + 2
-      );
-      const lastSquare = [...playerSquares].filter(
-        (square) =>
-          square.value[0] == squareValue[0] &&
-          square.value[1] == squareValue[1] + 3
-      );
-      if (
-        nextSquare[0].className == "player-square" &&
-        middleSquare[0].className == "player-square" &&
-        lastSquare[0].className == "player-square"
-      ) {
-        return true;
-      } else return false;
-    }
+    x = 0;
+    y = 1;
+  }
+  if (direction == "vertical") {
+    x = 1;
+    y = 0;
+  }
+
+  if (currentShipLength == 2) {
+    const nextSquare = [...playerSquares].filter(
+      (square) =>
+        square.value[x] == squareValue[x] &&
+        square.value[y] == squareValue[y] + 1
+    );
+    if (nextSquare[0].className == "player-square") {
+      return true;
+    } else return false;
+  }
+  if (currentShipLength == 3) {
+    const nextSquare = [...playerSquares].filter(
+      (square) =>
+        square.value[x] == squareValue[x] &&
+        square.value[y] == squareValue[y] + 1
+    );
+    const lastSquare = [...playerSquares].filter(
+      (square) =>
+        square.value[x] == squareValue[x] &&
+        square.value[y] == squareValue[y] + 2
+    );
+    if (
+      nextSquare[0].className == "player-square" &&
+      lastSquare[0].className == "player-square"
+    ) {
+      return true;
+    } else return false;
+  }
+  if (currentShipLength == 4) {
+    const nextSquare = [...playerSquares].filter(
+      (square) =>
+        square.value[x] == squareValue[x] &&
+        square.value[y] == squareValue[y] + 1
+    );
+    const middleSquare = [...playerSquares].filter(
+      (square) =>
+        square.value[x] == squareValue[x] &&
+        square.value[y] == squareValue[y] + 2
+    );
+    const lastSquare = [...playerSquares].filter(
+      (square) =>
+        square.value[x] == squareValue[x] &&
+        square.value[y] == squareValue[y] + 3
+    );
+    if (
+      nextSquare[0].className == "player-square" &&
+      middleSquare[0].className == "player-square" &&
+      lastSquare[0].className == "player-square"
+    ) {
+      return true;
+    } else return false;
   }
 };
 
@@ -204,55 +241,23 @@ function getAdjacentSquares(e, squareList) {
 
   for (const square of squareList) {
     if (direction == "horizontal") {
-      if (
-        square.value[0] == squareRowValue &&
-        square.value[1] == squareColumnValue
-      ) {
-        squareArray.push(square);
-      }
-      if (
-        square.value[0] == squareRowValue &&
-        square.value[1] == squareColumnValue + 1
-      ) {
-        squareArray.push(square);
-      }
-      if (
-        square.value[0] == squareRowValue &&
-        square.value[1] == squareColumnValue + 2
-      ) {
-        squareArray.push(square);
-      }
-      if (
-        square.value[0] == squareRowValue &&
-        square.value[1] == squareColumnValue + 3
-      ) {
-        squareArray.push(square);
+      for (let i = 0; i < 4; i++) {
+        if (
+          square.value[0] == squareRowValue &&
+          square.value[1] == squareColumnValue + i
+        ) {
+          squareArray.push(square);
+        }
       }
     }
     if (direction == "vertical") {
-      if (
-        square.value[0] == squareRowValue &&
-        square.value[1] == squareColumnValue
-      ) {
-        squareArray.push(square);
-      }
-      if (
-        square.value[0] == squareRowValue + 1 &&
-        square.value[1] == squareColumnValue
-      ) {
-        squareArray.push(square);
-      }
-      if (
-        square.value[0] == squareRowValue + 2 &&
-        square.value[1] == squareColumnValue
-      ) {
-        squareArray.push(square);
-      }
-      if (
-        square.value[0] == squareRowValue + 3 &&
-        square.value[1] == squareColumnValue
-      ) {
-        squareArray.push(square);
+      for (let i = 0; i < 4; i++) {
+        if (
+          square.value[1] == squareColumnValue &&
+          square.value[0] == squareRowValue + i
+        ) {
+          squareArray.push(square);
+        }
       }
     }
   }
@@ -268,6 +273,9 @@ const getCoordinatesToPlaceShip = (e) => {
     if (adjacentSquares.length >= 2) {
       currentCoordinates = [adjacentSquares[0].value, adjacentSquares[1].value];
     }
+    for (let i = 0; i < 2; i++) {
+      adjacentSquares[i].classList.add("occupied");
+    }
   }
   if (currentShipLength == 3) {
     if (adjacentSquares.length >= 3) {
@@ -276,6 +284,9 @@ const getCoordinatesToPlaceShip = (e) => {
         adjacentSquares[1].value,
         adjacentSquares[2].value,
       ];
+      for (let i = 0; i < 3; i++) {
+        adjacentSquares[i].classList.add("occupied");
+      }
     }
   }
   if (currentShipLength == 4) {
@@ -286,6 +297,9 @@ const getCoordinatesToPlaceShip = (e) => {
         adjacentSquares[2].value,
         adjacentSquares[3].value,
       ];
+      for (let i = 0; i < 4; i++) {
+        adjacentSquares[i].classList.add("occupied");
+      }
     }
   }
 };
@@ -301,17 +315,16 @@ const addClassToElements = (e) => {
   });
   const adjacentSquares = getAdjacentSquares(currentValue, playerSquares);
 
-  if (direction == "vertical") {
-    playerSquares.forEach((square) => {
-      square.classList.add("vertical");
-    });
-  }
-
   if (currentShipLength == 2) {
     if (adjacentSquares.length >= 2) {
       adjacentSquares[0].classList.add(`${activeClass}-start`);
       adjacentSquares[1].classList.add(`${activeClass}-end`);
       currentCoordinates = [adjacentSquares[0].value, adjacentSquares[1].value];
+      if (direction == "vertical") {
+        for (let i = 0; i < 2; i++) {
+          adjacentSquares[i].classList.add("vertical");
+        }
+      }
     }
   }
   if (currentShipLength == 3) {
@@ -324,6 +337,11 @@ const addClassToElements = (e) => {
         adjacentSquares[1].value,
         adjacentSquares[2].value,
       ];
+      if (direction == "vertical") {
+        for (let i = 0; i < 3; i++) {
+          adjacentSquares[i].classList.add("vertical");
+        }
+      }
     }
   }
   if (currentShipLength == 4) {
@@ -338,6 +356,11 @@ const addClassToElements = (e) => {
         adjacentSquares[2].value,
         adjacentSquares[3].value,
       ];
+      if (direction == "vertical") {
+        for (let i = 0; i < 4; i++) {
+          adjacentSquares[i].classList.add("vertical");
+        }
+      }
     }
   }
 };
@@ -445,9 +468,13 @@ const removeClassFromElements = (e) => {
   const playerSquares = document.querySelectorAll(".player-square");
   const adjacentSquares = getAdjacentSquares(currentValue, playerSquares);
 
-  playerSquares.forEach((square) => {
-    square.classList.remove("vertical");
-  });
+  if (direction == "vertical") {
+    adjacentSquares.forEach((square) => {
+      if (!square.className.includes("occupied")) {
+        square.classList.remove("vertical"); // prevents removing the vertical class from placed vertical ships
+      }
+    });
+  }
 
   if (currentShipLength == 2) {
     if (adjacentSquares.length >= 2) {
