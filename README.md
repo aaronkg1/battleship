@@ -1,6 +1,8 @@
 # battleship
 battleship app for the Odin Project
 
+Live preview: https://aaronkg1.github.io/battleship/
+
 The project started off with a test driven approach. Using Jest to test each function was returning the correct values as I went along. I created a Ship factory function which contained a "hit" method, and a "isSunk" method. I wrote a Gameboard factory function that contained a board, a function to place ships on board, one to receive an attack and one to determine if all ships on the board had been sunk. I also made a Player factory function and through composition, a Computer factory function that contained some additional methods for the computer AI. Initially I created a method in the Computer contructor that picked a square to attack completely at random.
 However, I figured I could make the computer make an intelligent decision on subsequent goes, by attacking adjacent squares to any hits. Once the computer had one or more hits, the function determined if the ship was horizontal or vertical and then moved accordingly.
 To do this I made use of if statements for each possible scenario. I'm sure this could be refactored in a much more elagant way but it seemed to work well.
