@@ -67,12 +67,6 @@ const waitForClick = async () => {
 
   playerSquares.forEach((square) => {
     const click = new Promise((resolve, reject) => {
-      occupiedSquares.forEach((square) => {
-        square.removeEventListener("mouseover", addClassToElements);
-        square.removeEventListener("click", addClassToElements);
-        square.removeEventListener("mouseout", removeClassFromElements);
-        square.removeEventListener("click", getCoordinatesToPlaceShip);
-      });
       square.addEventListener("mouseover", addClassToElements);
       square.addEventListener("mouseout", removeClassFromElements);
       square.addEventListener("click", addClassToElements);
